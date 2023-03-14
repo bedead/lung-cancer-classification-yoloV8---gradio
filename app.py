@@ -1,5 +1,6 @@
 import gradio as gr
 from ultralytics import YOLO
+import os
 
 format = { 0: 'Bengin case',
              1: 'Bengin case Malignant case',
@@ -14,21 +15,26 @@ def image_classifier(inp):
     probs = result[0].probs
     max_tensor = max(probs)
     tensor_pos = ((probs == max_tensor).nonzero(as_tuple=True)[0])
-    
+
     return format.get(int(tensor_pos))
 
-web = gr.Interface(fn=image_classifier, inputs="image", outputs="text")
+web = gr.Interface(fn=image_classifier, inputs="image", outputs='text')
 
-
-
-with gr.Blocks() as site:
-    gr.Markdown("Lung cancer detection using Yolov8 model")
+with gr.Blocks() as app:
+    gr.Markdown("## Lung Cancer classification using Yolov8")
     with gr.Row():
-        img_input = gr.Image()
-        txt_output = gr.Textbox()
-    submit_btn = gr.Button("Submit")
+        inp_img = gr.Image()
+        out_txt = gr.Textbox()
+    btn = gr.Button(value="Submit")
+    btn.click(image_classifier, inputs=inp_img, outputs=out_txt)
 
-    submit_btn.click(image_classifier, inputs=img_input, outputs=txt_output)
+    gr.Markdown("## Image Examples")
+    gr.Examples(
+        examples=[os.path.join(os.path.dirname(__file__), "1.jpg"), os.path.join(os.path.dirname(__file__), "2.jpg")],
+        inputs=inp_img,
+        outputs=out_txt,
+        fn=image_classifier,
+        cache_examples=True,
+    )
 
-web.launch(share=True)
-
+app.launch(share=True)
