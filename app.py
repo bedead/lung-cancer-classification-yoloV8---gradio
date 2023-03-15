@@ -2,12 +2,14 @@ import gradio as gr
 from ultralytics import YOLO
 import os
 
+# catgories
 format = { 0: 'Bengin case',
              1: 'Bengin case Malignant case',
              2: 'Malignant case',
              3: 'Malignant case Normal case',
              4: 'Normal case'}
 
+# returning classifiers output
 def image_classifier(inp):
     model = YOLO("best.pt")
 
@@ -18,8 +20,7 @@ def image_classifier(inp):
 
     return format.get(int(tensor_pos))
 
-web = gr.Interface(fn=image_classifier, inputs="image", outputs='text')
-
+# gradio code block for input and output
 with gr.Blocks() as app:
     gr.Markdown("## Lung Cancer classification using Yolov8")
     with gr.Row():
