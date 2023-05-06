@@ -3,15 +3,16 @@ from ultralytics import YOLO
 import os
 
 # catgories
-format = { 0: 'Bengin case',
-             1: 'Bengin case Malignant case',
-             2: 'Malignant case',
-             3: 'Malignant case Normal case',
-             4: 'Normal case'}
+format =  { 0: 'Adenocarcinoma case',
+            1: 'Bengin case',
+            2: 'Large cell Carcinoma case',
+            3: 'Malignant case',
+            4: 'Normal case',
+            5: 'Squamous cell Carcinoma case'}
 
 # returning classifiers output
 def image_classifier(inp):
-    model = YOLO("best.pt")
+    model = YOLO("best-2.pt")
 
     result = model.predict(source=inp)
     probs = result[0].probs
